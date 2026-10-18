@@ -1,5 +1,6 @@
 package com.assignment.userservice.service;
-
+import com.assignment.userservice.exception.UserNotFoundException;
+import java.util.List;
 import com.assignment.userservice.dto.CreateUserRequest;
 import com.assignment.userservice.entity.UserEntity;
 import com.assignment.userservice.exception.DuplicateEmailException;
@@ -49,4 +50,21 @@ public class UserService {
             throw new DuplicateEmailException(email);
         }
     }
+
+
+    @Transactional(readOnly = true)
+    public List<UserEntity> getAllUsers() {
+        logger.info("Fetching all users");
+
+        return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public UserEntity getUserById(Long id) {
+        logger.info("Fetching user with id={}", id);
+
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
 }

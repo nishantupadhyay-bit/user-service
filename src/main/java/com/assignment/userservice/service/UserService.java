@@ -2,14 +2,13 @@ package com.assignment.userservice.service;
 
 import com.assignment.userservice.dto.CreateUserRequest;
 import com.assignment.userservice.entity.UserEntity;
-import com.assignment.userservice.enums.UserRole;
 import com.assignment.userservice.exception.DuplicateEmailException;
 import com.assignment.userservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Locale;
 
@@ -31,7 +30,7 @@ public class UserService {
         String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
 
         if (userRepository.existsByEmailIgnoreCase(email)) {
-            logger.warn("User registration rejected because the email already exists");
+            logger.warn("User registration rejected: duplicate email");
             throw new DuplicateEmailException(email);
         }
 
@@ -41,10 +40,11 @@ public class UserService {
 
         try {
             UserEntity savedUser = userRepository.saveAndFlush(user);
+
             logger.info("User registered successfully with id={}", savedUser.getId());
+
             return savedUser;
         } catch (DataIntegrityViolationException exception) {
-            // The database unique constraint also protects concurrent registrations.
             logger.warn("User registration rejected by a database integrity constraint");
             throw new DuplicateEmailException(email);
         }

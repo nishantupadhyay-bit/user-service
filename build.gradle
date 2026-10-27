@@ -14,6 +14,7 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -22,9 +23,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'io.grpc:grpc-netty-shaded:1.83.1'
+    implementation 'io.grpc:grpc-services:1.83.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
-
+    implementation 'com.assignment:assignment4-protos:0.1.0-SNAPSHOT'
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
